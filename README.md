@@ -43,7 +43,7 @@ Returns the negation of a z1 boolean variable
 **Equal(a,b)**
 *Bool a*,
 *Bool b*:
-Returns the bi-implication of two z1 boolean variables
+Returns the bicondition of two z1 boolean variables
 
 **Imply(a,b)**
 *Bool a*,
