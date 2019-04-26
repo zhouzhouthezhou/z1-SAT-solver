@@ -10,8 +10,8 @@ See Example.py for a basic Knights vs Knaves application of z1
 
 ## Documentation
 ### Solver
-**add(phrase)**
-*string phrase*
+**add(phrase)**&nbsp;
+*string phrase*&nbsp;
 Adds a popositional statement and its variables to the Solver instance
 
 **check()**
