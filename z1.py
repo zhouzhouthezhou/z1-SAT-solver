@@ -140,7 +140,7 @@ def Not(a):
 	temp = '~' + a
 	return temp
 
-#returns bi-implication
+#returns bijection
 def Equal(a, b):
 	temp = a + '=' + b
 	return temp
