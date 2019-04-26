@@ -58,6 +58,12 @@ class Solver:
 				temp = q.popleft()
 				if temp == '~':
 					temp = '~' + q.popleft()
+					n = 1
+					while temp == '~':
+						n = n + 1
+						temp = q.popleft()
+					if n % 2 == 1:
+						temp = '~' + temp
 				v.append(temp)
 				a = self.generateVar(v.popleft())
 				b = self.generateVar(v.popleft())
