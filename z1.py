@@ -15,13 +15,42 @@ class Solver:
 	#Adds a propositional phrase and its variables into the Solver object
 	#@param phrase
 	#The propositional phrase to be added (string_
-	def add(self, phrase):
+	def add(self, phrases):
 		self.isChecked = False;
-		self.statement.append(phrase)
-		for c in phrase:
-			if c not in self.keywords and c not in self.varList and c != '~':
+
+		phrase = deque([])
+		for c in phrases:
+			phrase.append(c)
+
+		builder = ''
+		stack = []
+		while phrase:
+			c = phrase.popleft()
+			if c not in self.keywords and c not in self.varList and c != '(' and c != ')':
+				negate = False;
+				while c == '~':
+					negate = not negate
+					c = phrase.popleft()
+					
+				if negate:
+					builder = builder + '~'
+
 				self.varList.append(c)
 				self.varDict[c] = True
+				builder = builder + c
+			elif c in self.keywords or c == '(':
+				stack.append(c)
+			elif c == ')':
+				t = stack.pop()
+				while t != '(':
+					builder = builder + t
+					t = stack.pop()
+
+		while stack:
+			t = stack.pop()
+			builder = builder + t
+		print(builder)
+					
 
 	#Handles creating a negated variable
 	#@param v
@@ -36,7 +65,7 @@ class Solver:
 	#Determintes the SAT of a given propositional phrase
 	#@param phrase
 	#The propositional phrase to be evaluated (string)
-	def evaluatePhrase(self, phrase):
+	def old_evaluatePhrase(self, phrase):
 		ans = True
 		q = deque([])
 		for c in phrase:
@@ -76,6 +105,10 @@ class Solver:
 			else:
 				v.append(c)
 		return ans
+
+	def evaluatePhrase(self, phrase):
+		pass
+
 
 	#Generates the nth line of the truth table representetive of the current amout of propositional variables
 	#@param line
@@ -124,6 +157,8 @@ class Solver:
 			return self.varDict
 		else:
 			return None
+
+#################################################################################################################################################
 
 #returns conjunction
 def And(a, b):
