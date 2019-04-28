@@ -14,9 +14,9 @@ class Solver:
 
 	#Adds a propositional phrase and its variables into the Solver object
 	#@param phrase
-	#The propositional phrase to be added (string_
+	#The propositional phrase to be added (string)
 	def add(self, phrases):
-		print('########################')
+		#print('########################')
 		#print(phrases)
 		self.isChecked = False;
 
@@ -29,7 +29,7 @@ class Solver:
 		while phrase:
 			#print(stack)
 			c = phrase.popleft()
-			print(c)
+			#print(c)
 			if c not in self.keywords and c != '(' and c != ')':
 				negate = False;
 				while c == '~':
@@ -54,7 +54,7 @@ class Solver:
 						t = '(' 
 					else:
 						t = stack.pop()
-			print(builder)
+			#print(builder)
 
 		while stack:
 			t = stack.pop()
@@ -118,26 +118,26 @@ class Solver:
 		return ans
 
 	def evaluatePhrase(self, phrase):
-		for s in self.statement:
-			stack = []
-			for c in s:
-				if c in self.varList:
-					stack.append(self.varDict[c])
-				elif c in self.keywords:
-					a = stack.pop()
-					b = stack.pop()
-					if c == '&':
-						stack.append(a and b)
-					elif c == '|':
-						stack.append(a or b)
-					elif c == '=':
-						stack.append(a == b)
-				elif c == '~':
-					a = stack.pop()
-					stack.append(not a)
-				#print(stack)
-
-		return stack.pop()
+		stack = []
+		for c in phrase:
+			if c in self.varList:
+				stack.append(self.varDict[c])
+			elif c in self.keywords:
+				a = stack.pop()
+				b = stack.pop()
+				if c == '&':
+					stack.append(a and b)
+				elif c == '|':
+					stack.append(a or b)
+				elif c == '=':
+					stack.append(a == b)
+			elif c == '~':
+				a = stack.pop()
+				stack.append(not a)
+			print(stack)
+		ans = stack.pop()
+		print(ans)
+		return ans
 
 
 
@@ -166,7 +166,6 @@ class Solver:
 		n = pow(2, len(self.varList))
 		for i in range(n):
 			self.generateline(i+1, 0, n)
-			#print(self.statement)
 			ans = True
 			for s in self.statement:
 				ans = ans and self.evaluatePhrase(s)
