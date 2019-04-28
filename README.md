@@ -3,10 +3,11 @@ Not as good as z3, not good enough to be z2
 
 See Example.py for a basic Knights vs Knaves application of z1
 
-## Constraints
+## Known Issues
 * Only works for booleans
 * Does not support predicate logic
-* Does not support parenthesis
+* ~Does not support parenthesis~
+* ~Negation does not work on statements~
 
 ## Documentation
 ### Solver
