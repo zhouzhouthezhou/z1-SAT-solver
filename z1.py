@@ -107,6 +107,10 @@ class Solver:
 				v.append(c)
 		return ans
 
+	#New evaluate phrae.
+	#Evaluates a given postfix phrase for SAT
+	#@param phrase
+	#The propositional phrase to be evaluated in postfix notation (string)
 	def evaluatePhrase(self, phrase):
 		stack = []
 		for c in phrase:
@@ -129,8 +133,6 @@ class Solver:
 		ans = stack.pop()
 		print(ans)
 		return ans
-
-
 
 	#Generates the nth line of the truth table representetive of the current amout of propositional variables
 	#@param line
@@ -180,6 +182,7 @@ class Solver:
 		else:
 			return None
 
+	#Prints the set of containts given to the Solver instance in postfix notiation
 	def printConstraints(self):
 		print(self.statement)
 
@@ -187,12 +190,12 @@ class Solver:
 
 #returns conjunction
 def And(a, b):
-	temp = '((' + a +  ')' + '&' + '(' + b + '))'
+	temp = '((' + a +  ')&(' + b + '))'
 	return temp
 
 #returns disjunction
 def Or(a, b):
-	temp = '((' + a + ')'+ '|' + '(' + b + '))'
+	temp = '((' + a + ')|(' + b + '))'
 	return temp
 
 #returns negation
@@ -202,7 +205,7 @@ def Not(a):
 
 #returns biconditional
 def Equal(a, b):
-	temp = '((' + a + ')'+ '=' + '(' + b + '))'
+	temp = '((' + a + ')=(' + b + '))'
 	return temp
 
 #returns implication

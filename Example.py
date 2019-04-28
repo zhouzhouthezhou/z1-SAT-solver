@@ -18,13 +18,7 @@ b = Bool('b')
 s = Solver()
 
 s.add(Imply(a,Not(b)))
-#s.add(Imply(b, a))
-#s.add(Imply(b, b))
 s.add(Imply(b, And(a, b)))
-#s.add('~a|b')
-#s.add('~b|(a&b)')
-print('hello')
-s.printConstraints()
 
 print(s.check())
 print(s.model())
