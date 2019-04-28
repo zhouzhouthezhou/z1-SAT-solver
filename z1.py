@@ -16,6 +16,8 @@ class Solver:
 	#@param phrase
 	#The propositional phrase to be added (string_
 	def add(self, phrases):
+		print('########################')
+		#print(phrases)
 		self.isChecked = False;
 
 		phrase = deque([])
@@ -25,32 +27,40 @@ class Solver:
 		builder = ''
 		stack = []
 		while phrase:
+			#print(stack)
 			c = phrase.popleft()
-			if c not in self.keywords and c not in self.varList and c != '(' and c != ')':
+			print(c)
+			if c not in self.keywords and c != '(' and c != ')':
 				negate = False;
 				while c == '~':
 					negate = not negate
 					c = phrase.popleft()
 					
+				if c not in self.varList:
+					self.varList.append(c)
+					self.varDict[c] = True
+
+				builder = builder + c
+
 				if negate:
 					builder = builder + '~'
-
-				self.varList.append(c)
-				self.varDict[c] = True
-				builder = builder + c
 			elif c in self.keywords or c == '(':
 				stack.append(c)
 			elif c == ')':
 				t = stack.pop()
 				while t != '(':
 					builder = builder + t
-					t = stack.pop()
+					if len(stack) == 0:
+						t = '(' 
+					else:
+						t = stack.pop()
+			print(builder)
 
 		while stack:
 			t = stack.pop()
 			builder = builder + t
-		print(builder)
-					
+
+		self.statement.append(builder)
 
 	#Handles creating a negated variable
 	#@param v
@@ -62,6 +72,7 @@ class Solver:
 		else:
 			return self.varDict[v]
 
+	#DO NOT USE
 	#Determintes the SAT of a given propositional phrase
 	#@param phrase
 	#The propositional phrase to be evaluated (string)
@@ -107,7 +118,27 @@ class Solver:
 		return ans
 
 	def evaluatePhrase(self, phrase):
-		pass
+		for s in self.statement:
+			stack = []
+			for c in s:
+				if c in self.varList:
+					stack.append(self.varDict[c])
+				elif c in self.keywords:
+					a = stack.pop()
+					b = stack.pop()
+					if c == '&':
+						stack.append(a and b)
+					elif c == '|':
+						stack.append(a or b)
+					elif c == '=':
+						stack.append(a == b)
+				elif c == '~':
+					a = stack.pop()
+					stack.append(not a)
+				#print(stack)
+
+		return stack.pop()
+
 
 
 	#Generates the nth line of the truth table representetive of the current amout of propositional variables
@@ -135,6 +166,7 @@ class Solver:
 		n = pow(2, len(self.varList))
 		for i in range(n):
 			self.generateline(i+1, 0, n)
+			#print(self.statement)
 			ans = True
 			for s in self.statement:
 				ans = ans and self.evaluatePhrase(s)
@@ -158,26 +190,29 @@ class Solver:
 		else:
 			return None
 
+	def printConstraints(self):
+		print(self.statement)
+
 #################################################################################################################################################
 
 #returns conjunction
 def And(a, b):
-	temp = a + '&' + b
+	temp = '((' + a +  ')' + '&' + '(' + b + '))'
 	return temp
 
 #returns disjunction
 def Or(a, b):
-	temp = a + '|' + b
+	temp = '((' + a + ')'+ '|' + '(' + b + '))'
 	return temp
 
 #returns negation
 def Not(a):
-	temp = '~' + a
+	temp = '~'  + a 
 	return temp
 
 #returns biconditional
 def Equal(a, b):
-	temp = a + '=' + b
+	temp = '((' + a + ')'+ '=' + '(' + b + '))'
 	return temp
 
 #returns implication
