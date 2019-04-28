@@ -8,11 +8,11 @@ class Solver:
 	def __init__(self):
 		self.varList = []
 		self.varDict = dict()
-		self.keywords = ['&', '|', '=']
+		self.keywords = ['&', '|', '=', '~', '(']
 		self.statement = []
 		self.isChecked = False;
 
-	#Adds a propositional phrase and its variables into the Solver object
+	#Adds a propositional phrase and its variables into the Solver object and converts the phrase to RPN
 	#@param phrase
 	#The propositional phrase to be added (string)
 	def add(self, phrases):
@@ -30,21 +30,11 @@ class Solver:
 			#print(stack)
 			c = phrase.popleft()
 			#print(c)
-			if c not in self.keywords and c != '(' and c != ')':
-				negate = False;
-				while c == '~':
-					negate = not negate
-					c = phrase.popleft()
-					
-				if c not in self.varList:
-					self.varList.append(c)
-					self.varDict[c] = True
-
+			if c not in self.keywords and c != ')':
+				self.varList.append(c)
+				self.varDict[c] = True
 				builder = builder + c
-
-				if negate:
-					builder = builder + '~'
-			elif c in self.keywords or c == '(':
+			elif c in self.keywords:
 				stack.append(c)
 			elif c == ')':
 				t = stack.pop()
@@ -123,17 +113,18 @@ class Solver:
 			if c in self.varList:
 				stack.append(self.varDict[c])
 			elif c in self.keywords:
-				a = stack.pop()
-				b = stack.pop()
-				if c == '&':
-					stack.append(a and b)
-				elif c == '|':
-					stack.append(a or b)
-				elif c == '=':
-					stack.append(a == b)
-			elif c == '~':
-				a = stack.pop()
-				stack.append(not a)
+				if c == '~':
+					a = stack.pop()
+					stack.append(not a)
+				else:
+					a = stack.pop()
+					b = stack.pop()
+					if c == '&':
+						stack.append(a and b)
+					elif c == '|':
+						stack.append(a or b)
+					elif c == '=':
+						stack.append(a == b)
 			print(stack)
 		ans = stack.pop()
 		print(ans)
@@ -206,7 +197,7 @@ def Or(a, b):
 
 #returns negation
 def Not(a):
-	temp = '~'  + a 
+	temp = '~'  + '(' + a + ')'
 	return temp
 
 #returns biconditional
