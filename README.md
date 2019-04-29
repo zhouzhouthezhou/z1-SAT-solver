@@ -16,10 +16,10 @@ See Example.py for a basic Knights vs Knaves application of z1
 Adds a popositional statement and its variables to the Solver instance  
 
 **check()**:  
-Checks if the current Solver instance is SAT  
+Checks if the current Solver instance is `SAT`  
 
 **model()**:  
-Returns the solution to the current Solver instance if **check()** returns SAT, otherwise it returns `None`  
+Returns the solution to the current Solver instance if **check()** returns `SAT`, otherwise it returns `None`  
 
 ### Propositional Operations
 
